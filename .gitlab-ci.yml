@@ -29,3 +29,4 @@ test:
   only:
     - merge_requests
     - main
+    - develop
