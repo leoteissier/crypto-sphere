@@ -1,6 +1,6 @@
 # Mon Projet de Cryptographie
 
-[![pipeline status](https://gitlab.com/leoteissier/crytpo-sphere/badges/main/pipeline.svg)](https://gitlab.com/leoteissier/crytpo-sphere/commits/main)
+[![pipeline status](https://gitlab.com/leoteissier/crypto-sphere/badges/main/pipeline.svg)](https://gitlab.com/leoteissier/crytpo-sphere/commits/main)
 
 ## Description
 
