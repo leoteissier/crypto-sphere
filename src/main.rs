@@ -22,99 +22,165 @@ fn main() {
         let action = ask_non_empty_input("Voulez-vous (C)hiffrer ou (D)échiffrer ?").to_lowercase();
 
         // Demander si l'utilisateur souhaite utiliser la clé prédéfinie ou entrer une clé manuellement
-        let choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?").to_lowercase();
+        let mut choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
 
-        match choix_algo.as_str() {
-            "1" => {
-                let decalage = if choix_cle == "p" {
-                    constants::CLE_CESAR
-                } else {
-                    let decalage = ask_non_empty_input("Entrez le décalage pour le chiffre de César :");
-                    verification::verify_caesar_key(&decalage).expect("Clé invalide pour César")
-                };
-
-                let cesar = Cesar { decalage };
-
-                if action == "c" {
-                    println!("Texte chiffré : {}", cesar.chiffrer(&texte));
-                } else {
-                    println!("Texte déchiffré : {}", cesar.dechiffrer(&texte));
+        loop {
+            match choix_algo.as_str() {
+                "1" => {
+                    // Chiffre de César
+                    let decalage = loop {
+                        if choix_cle == "p" {
+                            break constants::CLE_CESAR;
+                        } else if choix_cle == "m" {
+                            let decalage = ask_non_empty_input("Entrez le décalage pour le chiffre de César (nombre entier) :");
+                            match verification::verify_caesar_key(&decalage) {
+                                Ok(decalage_valide) => break decalage_valide,
+                                Err(_) => {
+                                    println!("Clé invalide pour César. Réessayez.");
+                                    choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                                }
+                            }
+                        } else {
+                            println!("Mode de clé non valide. Réessayez.");
+                            choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                        }
+                    };
+        
+                    let cesar = Cesar { decalage };
+        
+                    if action == "c" {
+                        println!("Texte chiffré : {}", cesar.chiffrer(&texte));
+                    } else {
+                        println!("Texte déchiffré : {}", cesar.dechiffrer(&texte));
+                    }
+                }
+        
+                "2" => {
+                    // Chiffrement XOR
+                    let cle = loop {
+                        if choix_cle == "p" {
+                            break constants::CLE_XOR;
+                        } else if choix_cle == "m" {
+                            let cle = ask_non_empty_input("Entrez un caractère comme clé pour XOR :");
+                            match verification::verify_xor_key(&cle) {
+                                Ok(cle_valide) => break cle_valide,
+                                Err(_) => {
+                                    println!("Clé invalide pour XOR. Réessayez.");
+                                    choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                                }
+                            }
+                        } else {
+                            println!("Mode de clé non valide. Réessayez.");
+                            choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                        }
+                    };
+        
+                    let xor = Xor { cle };
+        
+                    if action == "c" {
+                        println!("Texte chiffré : {}", xor.chiffrer(&texte));
+                    } else {
+                        println!("Texte déchiffré : {}", xor.dechiffrer(&texte));
+                    }
+                }
+        
+                "3" => {
+                    // Rail Fence
+                    let rails = loop {
+                        if choix_cle == "p" {
+                            break constants::CLE_RAIL_FENCE;
+                        } else if choix_cle == "m" {
+                            let rails = ask_non_empty_input("Entrez le nombre de rails pour Rail Fence (nombre entier) :");
+                            match verification::verify_rail_fence_key(&rails) {
+                                Ok(rails_valide) => break rails_valide,
+                                Err(_) => {
+                                    println!("Clé invalide pour Rail Fence. Réessayez.");
+                                    choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                                }
+                            }
+                        } else {
+                            println!("Mode de clé non valide. Réessayez.");
+                            choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                        }
+                    };
+        
+                    let rail_fence = RailFence { rails };
+        
+                    if action == "c" {
+                        println!("Texte chiffré : {}", rail_fence.chiffrer(&texte));
+                    } else {
+                        println!("Texte déchiffré : {}", rail_fence.dechiffrer(&texte));
+                    }
+                }
+        
+                "4" => {
+                    // Chiffre de Vigenère
+                    let cle = loop {
+                        if choix_cle == "p" {
+                            break constants::CLE_VIGENERE.to_string();
+                        } else if choix_cle == "m" {
+                            let cle = ask_non_empty_input("Entrez la clé pour le chiffre de Vigenère :");
+                            match verification::verify_vigenere_key(&cle) {
+                                Ok(cle_valide) => break cle_valide,
+                                Err(_) => {
+                                    println!("Clé invalide pour Vigenère. Réessayez.");
+                                    choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                                }
+                            }
+                        } else {
+                            println!("Mode de clé non valide. Réessayez.");
+                            choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                        }
+                    };
+        
+                    let vigenere = Vigenere { cle };
+        
+                    if action == "c" {
+                        println!("Texte chiffré : {}", vigenere.chiffrer(&texte));
+                    } else {
+                        println!("Texte déchiffré : {}", vigenere.dechiffrer(&texte));
+                    }
+                }
+        
+                "5" => {
+                    // Chiffre de Substitution
+                    let cle = loop {
+                        if choix_cle == "p" {
+                            break constants::CLE_SUBSTITUTION.to_string();
+                        } else if choix_cle == "m" {
+                            let cle = ask_non_empty_input("Entrez la clé pour le chiffre de Substitution (26 lettres uniques) :");
+                            match verification::verify_substitution_key(&cle) {
+                                Ok(cle_valide) => break cle_valide,
+                                Err(_) => {
+                                    println!("Clé invalide pour Substitution. Réessayez.");
+                                    choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                                }
+                            }
+                        } else {
+                            println!("Mode de clé non valide. Réessayez.");
+                            choix_cle = ask_non_empty_input("Voulez-vous utiliser la clé prédéfinie (P) ou entrer une clé manuellement (M) ?");
+                        }
+                    };
+        
+                    let substitution = Substitution { cle };
+        
+                    if action == "c" {
+                        println!("Texte chiffré : {}", substitution.chiffrer(&texte));
+                    } else {
+                        println!("Texte déchiffré : {}", substitution.dechiffrer(&texte));
+                    }
+                }
+        
+                _ => {
+                    println!("Choix d'algorithme non valide.");
+                    break; // Sortir du loop principal si l'algorithme est invalide
                 }
             }
-
-            "2" => {
-                let cle = if choix_cle == "p" {
-                    constants::CLE_XOR
-                } else {
-                    let cle = ask_non_empty_input("Entrez un caractère comme clé pour XOR :");
-                    verification::verify_xor_key(&cle).expect("Clé invalide pour XOR")
-                };
-
-                let xor = Xor { cle };
-
-                if action == "c" {
-                    println!("Texte chiffré : {}", xor.chiffrer(&texte));
-                } else {
-                    println!("Texte déchiffré : {}", xor.dechiffrer(&texte));
-                }
-            }
-
-            "3" => {
-                let rails = if choix_cle == "p" {
-                    constants::CLE_RAIL_FENCE
-                } else {
-                    let rails = ask_non_empty_input("Entrez le nombre de rails pour Rail Fence :");
-                    verification::verify_rail_fence_key(&rails).expect("Clé invalide pour Rail Fence")
-                };
-
-                let rail_fence = RailFence { rails };
-
-                if action == "c" {
-                    println!("Texte chiffré : {}", rail_fence.chiffrer(&texte));
-                } else {
-                    println!("Texte déchiffré : {}", rail_fence.dechiffrer(&texte));
-                }
-            }
-
-            "4" => {
-                let cle = if choix_cle == "p" {
-                    constants::CLE_VIGENERE.to_string()
-                } else {
-                    let cle = ask_non_empty_input("Entrez la clé pour le chiffre de Vigenère :");
-                    verification::verify_vigenere_key(&cle).expect("Clé invalide pour Vigenère")
-                };
-
-                let vigenere = Vigenere { cle };
-
-                if action == "c" {
-                    println!("Texte chiffré : {}", vigenere.chiffrer(&texte));
-                } else {
-                    println!("Texte déchiffré : {}", vigenere.dechiffrer(&texte));
-                }
-            }
-
-            "5" => {
-                let cle = if choix_cle == "p" {
-                    constants::CLE_SUBSTITUTION.to_string()
-                } else {
-                    let cle = ask_non_empty_input("Entrez la clé pour le chiffre de Substitution (26 lettres uniques) :");
-                    verification::verify_substitution_key(&cle).expect("Clé invalide pour Substitution")
-                };
-
-                let substitution = Substitution { cle };
-
-                if action == "c" {
-                    println!("Texte chiffré : {}", substitution.chiffrer(&texte));
-                } else {
-                    println!("Texte déchiffré : {}", substitution.dechiffrer(&texte));
-                }
-            }
-
-            _ => println!("Choix d'algorithme non valide."),
         }
-
-        let continuer = ask_non_empty_input("Voulez-vous continuer ? (1 pour Oui, 0 pour Non) :");
-        if continuer.trim() == "0" {
+        
+        
+        let continuer = ask_non_empty_input("Voulez-vous continuer ? (1 pour Oui, 0 pour Non) :").trim().to_string(); // Convert the trimmed input to a String
+        if continuer == "0" {
             break;
         }
     }
