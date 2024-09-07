@@ -1,0 +1,31 @@
+
+image: rust:latest
+
+stages:
+  - build
+  - test
+
+# Cache pour les dépendances de Cargo pour éviter de les télécharger à chaque run
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - target/
+    - .cargo/registry
+    - .cargo/git
+
+# Étape de build
+build:
+  stage: build
+  script:
+    - cargo build --verbose
+  only:
+    - main
+
+# Étape de test
+test:
+  stage: test
+  script:
+    - cargo test --verbose
+  only:
+    - merge_requests
+    - main
