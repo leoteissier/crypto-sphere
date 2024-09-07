@@ -184,9 +184,19 @@ fn main() {
         }
         
         
-        let continuer = ask_non_empty_input("Voulez-vous continuer ? (1 pour Oui, 0 pour Non) :").trim().to_string(); // Convert the trimmed input to a String
-        if continuer == "0" {
-            break;
+        loop {
+            let continuer = ask_non_empty_input("Voulez-vous continuer ? (1 pour Oui, 0 pour Non) :")
+                .trim()
+                .to_string(); // Convertir l'entrée en String après le trim
+
+            if continuer == "0" {
+                println!("Merci d'avoir utilisé notre programme !");
+                return; // Terminer le programme
+            } else if continuer == "1" {
+                break; // Continuer avec un nouvel algorithme
+            } else {
+                println!("Réponse invalide. Veuillez entrer 1 pour Oui ou 0 pour Non.");
+            }
         }
     }
 }
