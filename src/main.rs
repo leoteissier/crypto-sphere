@@ -53,6 +53,7 @@ fn main() {
                     } else {
                         println!("Texte déchiffré : {}", cesar.dechiffrer(&texte));
                     }
+                    break;
                 }
         
                 "2" => {
@@ -82,6 +83,7 @@ fn main() {
                     } else {
                         println!("Texte déchiffré : {}", xor.dechiffrer(&texte));
                     }
+                    break;
                 }
         
                 "3" => {
@@ -111,6 +113,7 @@ fn main() {
                     } else {
                         println!("Texte déchiffré : {}", rail_fence.dechiffrer(&texte));
                     }
+                    break;
                 }
         
                 "4" => {
@@ -140,6 +143,7 @@ fn main() {
                     } else {
                         println!("Texte déchiffré : {}", vigenere.dechiffrer(&texte));
                     }
+                    break;
                 }
         
                 "5" => {
@@ -169,6 +173,7 @@ fn main() {
                     } else {
                         println!("Texte déchiffré : {}", substitution.dechiffrer(&texte));
                     }
+                    break;
                 }
         
                 _ => {
